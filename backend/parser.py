@@ -140,7 +140,12 @@ def extract_date(text: str) -> str | None:
                 valid_results.append((matched_text, parsed_date))
 
         if valid_results:
-            _, parsed = valid_results[-1]
+            matched_text, parsed = valid_results[-1]
+            # Re-parse matched_text using dateparser.parse for superior time accuracy
+            import dateparser as dp
+            better_parsed = dp.parse(matched_text, settings=settings)
+            if better_parsed:
+                parsed = better_parsed
             return _format_date(parsed)
 
     # Strategy 2: Regex fallback — extract date-like substrings and parse them
