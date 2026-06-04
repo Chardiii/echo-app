@@ -119,10 +119,13 @@ class MemoryService {
     return _firestore
         .collection('memories')
         .where('uid', isEqualTo: user.uid)
-        .orderBy('created_at', descending: true)
         .snapshots()
-        .map((snapshot) =>
-            snapshot.docs.map((doc) => Memory.fromFirestore(doc)).toList());
+        .map((snapshot) {
+          final list = snapshot.docs.map((doc) => Memory.fromFirestore(doc)).toList();
+          // Sort locally: newest first
+          list.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+          return list;
+        });
   }
 
   /// Get memory count stats for the current user
