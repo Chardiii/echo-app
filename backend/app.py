@@ -49,7 +49,17 @@ app = Flask(__name__)
 CORS(app)  # Allow Flutter app to make requests
 
 
-# ─── Health Check ─────────────────────────────────────────────────────────────
+# ─── Default Root & Health Check ──────────────────────────────────────────────
+
+@app.route("/", methods=["GET"])
+def index():
+    """Friendly welcome message for the API root."""
+    return jsonify({
+        "message": "Welcome to the Echo API. Your second memory assistant backend is running live!",
+        "status": "active",
+        "documentation": "https://github.com/Chardiii/echo-app"
+    })
+
 
 @app.route("/health", methods=["GET"])
 def health():
