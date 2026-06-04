@@ -106,8 +106,16 @@ def extract_date(text: str) -> str | None:
             return parsed.strftime("%Y-%m-%d")
         return parsed.strftime("%Y-%m-%dT%H:%M:%S")
 
+    # Clean reminder prefixes to avoid dateparser misinterpreting words like "me" or "to"
+    cleaned_text = text
+    for prefix in REMINDER_PREFIXES:
+        cleaned_text = re.sub(prefix, "", cleaned_text, flags=re.IGNORECASE).strip()
+    
+    # Also remove isolated words that are known false positives in dateparser (like 'me', 'to', 'us')
+    cleaned_text = re.sub(r"\b(me|to|i|us)\b", "", cleaned_text, flags=re.IGNORECASE).strip()
+
     # Strategy 1: Use search_dates for full-sentence parsing
-    results = search_dates(text, settings=settings)
+    results = search_dates(cleaned_text, settings=settings)
 
     if results:
         valid_results = []
@@ -117,9 +125,15 @@ def extract_date(text: str) -> str | None:
             has_keyword = any(kw in text_lower for kw in date_keywords)
             is_long_enough = len(text_lower) > 2
 
-            # Reject time-like patterns (e.g. "9 AM") that search_dates
+            # Reject standalone time patterns (e.g. "9 AM", "at 9 AM") that search_dates
             # misinterprets as months — let the regex fallback handle these
-            if re.match(r"^\d{1,2}\s*(?:am|pm)$", text_lower):
+            has_time = bool(re.search(r"\b\d{1,2}(?::\d{2})?\s*(?:am|pm)\b", text_lower))
+            has_date_indicator = any(kw in text_lower for kw in [
+                "today", "tonight", "tomorrow", "yesterday",
+                "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday",
+                "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"
+            ])
+            if has_time and not has_date_indicator:
                 continue
 
             if (has_digit or has_keyword) and is_long_enough:
