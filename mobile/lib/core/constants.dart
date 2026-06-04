@@ -5,7 +5,7 @@
 class AppConstants {
   // API
   static const String apiBaseUrl = 'https://echo-api.onrender.com';
-  static const String apiBaseUrlLocal = 'http://192.168.1.7:5000'; // Host machine IP for physical device connection
+  static const String apiBaseUrlLocal = 'http://127.0.0.1:5000'; // Localhost for ADB reverse port forwarding
 
   // App Info
   static const String appName = 'Echo';
