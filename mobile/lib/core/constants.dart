@@ -5,7 +5,7 @@
 class AppConstants {
   // API
   static const String apiBaseUrl = 'https://echo-api.onrender.com';
-  static const String apiBaseUrlLocal = 'http://10.0.2.2:5000'; // Android emulator localhost
+  static const String apiBaseUrlLocal = 'http://192.168.1.7:5000'; // Host machine IP for physical device connection
 
   // App Info
   static const String appName = 'Echo';
