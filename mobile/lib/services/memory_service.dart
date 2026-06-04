@@ -64,7 +64,7 @@ class MemoryService {
   final AuthService _authService = AuthService();
 
   // Use local URL for development, switch to production URL for release
-  final String _baseUrl = AppConstants.apiBaseUrlLocal;
+  final String _baseUrl = AppConstants.apiBaseUrl;
 
   /// Parse natural language text via the Flask API
   Future<Map<String, dynamic>> parseMemory(String text) async {

@@ -4,7 +4,7 @@
 
 class AppConstants {
   // API
-  static const String apiBaseUrl = 'https://echo-api.onrender.com';
+  static const String apiBaseUrl = 'https://echo-app-h4o1.onrender.com';
   static const String apiBaseUrlLocal = 'http://127.0.0.1:5000'; // Localhost for ADB reverse port forwarding
 
   // App Info
