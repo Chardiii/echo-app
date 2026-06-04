@@ -1,0 +1,23 @@
+# Firebase credentials — NEVER commit these
+backend/firebase-admin-key.json
+mobile/android/app/google-services.json
+
+# Python
+__pycache__/
+*.pyc
+.env
+venv/
+*.egg-info/
+
+# Flutter
+mobile/.dart_tool/
+mobile/build/
+mobile/.flutter-plugins
+mobile/.flutter-plugins-dependencies
+mobile/.packages
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.swp
