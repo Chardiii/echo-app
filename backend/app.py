@@ -20,13 +20,25 @@ from auth import require_auth
 # ─── Firebase Initialization ─────────────────────────────────────────────────
 
 # Path to the Firebase Admin SDK key
-# In production, use environment variable FIREBASE_CREDENTIALS
-cred_path = os.environ.get(
-    "FIREBASE_CREDENTIALS",
-    os.path.join(os.path.dirname(__file__), "firebase-admin-key.json"),
-)
+# In production, we read the JSON config directly from the FIREBASE_CREDENTIALS_JSON env var.
+import json
 
-cred = credentials.Certificate(cred_path)
+cred_json = os.environ.get("FIREBASE_CREDENTIALS_JSON")
+if cred_json:
+    try:
+        cred_info = json.loads(cred_json)
+        cred = credentials.Certificate(cred_info)
+    except Exception as e:
+        print(f"Error loading FIREBASE_CREDENTIALS_JSON: {e}")
+        cred_path = os.path.join(os.path.dirname(__file__), "firebase-admin-key.json")
+        cred = credentials.Certificate(cred_path)
+else:
+    cred_path = os.environ.get(
+        "FIREBASE_CREDENTIALS",
+        os.path.join(os.path.dirname(__file__), "firebase-admin-key.json"),
+    )
+    cred = credentials.Certificate(cred_path)
+
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
